@@ -35,6 +35,22 @@ const PRESETS = [
   { name:"에스프레소",colors:{ bg:"#f5f0eb", text:"#28201a", charColor:"#7a5a3a", userColor:"#9a8a7a", dialogBg:"rgba(122,90,58,0.18)", italicColor:"#a07858", bubbleBgChar:"#ffffff", bubbleBgUser:"#ede6dc", bubbleBorder:"#ddd4c8" }},
 ];
 
+const FONTS = [
+  { key:"serif",   label:"명조체",     css:"'Noto Serif KR', Georgia, serif",          url:"https://fonts.googleapis.com/css2?family=Noto+Serif+KR&display=swap" },
+  { key:"pretendard", label:"프리텐다드", css:"'Pretendard', 'Noto Sans KR', sans-serif", url:"https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" },
+  { key:"noto",    label:"Noto Sans",  css:"'Noto Sans KR', sans-serif",               url:"https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" },
+  { key:"georgia", label:"Georgia",    css:"Georgia, serif",                            url:null },
+];
+
+const loadedFonts = new Set();
+function loadFont(f){
+  if(!f.url||loadedFonts.has(f.key)) return;
+  loadedFonts.add(f.key);
+  const l=document.createElement("link");
+  l.rel="stylesheet"; l.href=f.url;
+  document.head.appendChild(l);
+}
+
 const state = {
   messages:[], layout:"novel",
   title:"", subtitle:"",
@@ -42,6 +58,7 @@ const state = {
   copied:false, tab:"basic",
   colors:{ ...PRESETS[0].colors },
   confirmDeleteId: null,
+  font: "serif",
 };
 
 function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
@@ -97,7 +114,8 @@ function generateHTML(){
     if(layout==="bubble") return `<div style="margin-bottom:1.8em"><div style="font-size:.72em;font-weight:500;color:${isC?colors.charColor:colors.userColor};margin-bottom:.5em">${esc(isC?charName:userName)}</div><div style="background:${isC?colors.bubbleBgChar:colors.bubbleBgUser};border:1px solid ${colors.bubbleBorder};border-radius:12px;padding:16px 20px;font-size:.95em;color:${colors.text}">${toParas(msg.text,colors)}${noteBlockStr(msg.note)}</div></div>`;
     return `<div style="display:flex;gap:18px;margin-bottom:2em;align-items:flex-start"><div style="width:64px;flex-shrink:0;text-align:right;font-size:.68em;color:${isC?colors.charColor:colors.userColor};padding-top:3px">${esc(isC?charName:userName)}</div><div style="flex:1;border-left:2px solid ${isC?colors.charColor:colors.userColor};padding-left:16px;color:${colors.text}">${toParas(msg.text,colors)}${noteBlockStr(msg.note)}</div></div>`;
   };
-  return `<div style="max-width:680px;margin:0 auto;font-family:'Noto Serif KR',Georgia,serif;color:${colors.text};padding:2.5em 1.2em;background:${colors.bg}">\n${cover}${visible.map(fn).join("\n")}\n</div>`;
+  const fontCss = FONTS.find(f=>f.key===state.font)?.css || FONTS[0].css;
+  return `<div style="max-width:680px;margin:0 auto;font-family:${fontCss};color:${colors.text};padding:2.5em 1.2em;background:${colors.bg}">\n${cover}${visible.map(fn).join("\n")}\n</div>`;
 }
 
 function buildMsg(msg){
@@ -193,12 +211,13 @@ function render(){
 }
 
 function buildApp(){
-  const {layout,title,subtitle,charName,userName,messages,copied,tab,colors}=state;
-  const IS="font-family:Georgia,serif;font-size:.88em;color:#5a4a3a;background:transparent;border:none;border-bottom:1px solid #e0d4c4;padding:4px 2px;";
+  const {layout,title,subtitle,charName,userName,messages,copied,tab,colors,font}=state;
+  const curFont = FONTS.find(f=>f.key===font)||FONTS[0];
+  const IS=`font-family:${curFont.css};font-size:.88em;color:#5a4a3a;background:transparent;border:none;border-bottom:1px solid #e0d4c4;padding:4px 2px;`;
   const visibleCount=messages.filter(m=>!m.collapsed).length;
   const preview=messages.length===0
     ?`<div style="text-align:center;padding:4em 0;color:#c8b8a8;font-size:.85em;letter-spacing:.06em"><div style="font-size:1.8em;margin-bottom:.5em;opacity:.3">◌</div>JSON 파일을 업로드하면 로그가 표시됩니다</div>`
-    :`<div style="background:${colors.bg};border:1px solid #ede4d8;border-radius:10px;padding:2em 1.8em">
+    :`<div style="background:${colors.bg};border:1px solid #ede4d8;border-radius:10px;padding:2em 1.8em;font-family:${curFont.css}">
         <div style="text-align:center;padding:0 0 1.5em;border-bottom:1px solid #ede4d8;margin-bottom:2em">
           <div style="font-size:1.15em;font-weight:500;letter-spacing:.08em;color:${colors.charColor}">${esc(title||"제목 없음")}</div>
           ${subtitle?`<div style="font-size:.78em;color:${colors.userColor};margin-top:.35em">${esc(subtitle)}</div>`:""}
@@ -219,6 +238,9 @@ function buildApp(){
         <span style="color:#d4c4b0">·</span>
         <input id="inp-user" value="${esc(userName)}" placeholder="유저 이름" style="${IS}width:110px">
         <div style="margin-left:auto;display:flex;align-items:center;gap:8px">
+          <select id="sel-font" style="font-family:inherit;font-size:.76em;color:#7a5a3a;background:transparent;border:1px solid #e0d4c4;border-radius:4px;padding:5px 8px;cursor:pointer">
+            ${FONTS.map(f=>`<option value="${f.key}" ${font===f.key?"selected":""}>${f.label}</option>`).join("")}
+          </select>
           <div style="display:flex;border:1px solid #e0d4c4;border-radius:4px;overflow:hidden">
             ${[["novel","소설체"],["bubble","말풍선"],["minimal","미니멀"]].map(([k,l])=>
               `<button class="layout-btn" data-layout="${k}" style="font-family:Georgia,serif;font-size:.76em;letter-spacing:.05em;padding:5px 13px;border:none;cursor:pointer;background:${layout===k?"#e8ddd0":"transparent"};color:${layout===k?"#6a4a2a":"#aaa"};font-weight:${layout===k?500:400}">${l}</button>`
@@ -240,8 +262,25 @@ function buildApp(){
 function bindEvents(){
   document.getElementById("inp-title")?.addEventListener("input",e=>{state.title=e.target.value;});
   document.getElementById("inp-sub")?.addEventListener("input",e=>{state.subtitle=e.target.value;});
-  document.getElementById("inp-char")?.addEventListener("input",e=>{state.charName=e.target.value;render();});
-  document.getElementById("inp-user")?.addEventListener("input",e=>{state.userName=e.target.value;render();});
+  document.getElementById("inp-char")?.addEventListener("input",e=>{
+    if(e.isComposing) return;
+    state.charName=e.target.value; render();
+  });
+  document.getElementById("inp-char")?.addEventListener("compositionend",e=>{
+    state.charName=e.target.value; render();
+  });
+  document.getElementById("inp-user")?.addEventListener("input",e=>{
+    if(e.isComposing) return;
+    state.userName=e.target.value; render();
+  });
+  document.getElementById("inp-user")?.addEventListener("compositionend",e=>{
+    state.userName=e.target.value; render();
+  });
+  document.getElementById("sel-font")?.addEventListener("change",e=>{
+    state.font=e.target.value;
+    loadFont(FONTS.find(f=>f.key===e.target.value));
+    render();
+  });
   document.getElementById("file-inp")?.addEventListener("change",e=>{
     const file=e.target.files?.[0];if(!file)return;
     const reader=new FileReader();
@@ -310,6 +349,7 @@ function bindEvents(){
   document.querySelectorAll(".note-text").forEach(ta=>ta.addEventListener("input",e=>{const msg=state.messages.find(m=>m.id===+ta.dataset.id);if(msg)msg.note=e.target.value;}));
 }
 
+loadFont(FONTS[0]);
 render();
 </script>
 </body>
