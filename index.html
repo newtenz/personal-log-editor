@@ -65,13 +65,17 @@ function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").rep
 
 function fmtHtml(text, colors){
   const {dialogBg,italicColor}=colors;
-  const pat=/"([^"]+)"|(?<![a-zA-Z])'([^'\n]+)'(?![a-zA-Z])|\*([^*\n]+)\*/g;
+  const pat=/“([^”]+)”|"([^"]+)"|\u300c([^\u300d]+)\u300d|\u300e([^\u300f]+)\u300f|(?<![a-zA-Z])'([^'\n]+)'(?![a-zA-Z])|\*([^*\n]+)\*/g;
   let last=0,out="",m;
   while((m=pat.exec(text))!==null){
     out+=esc(text.slice(last,m.index));
-    if(m[1]!=null) out+=`<strong style="background:${dialogBg};padding:0 3px;border-radius:2px;font-weight:700">"${esc(m[1])}"</strong>`;
-    else if(m[2]!=null) out+=`<em style="font-style:italic;color:${italicColor}">'${esc(m[2])}'</em>`;
-    else if(m[3]!=null) out+=`<em style="font-style:italic;color:${italicColor}">${esc(m[3])}</em>`;
+    const dl=m[1]??m[2];
+    const jp1=m[3], jp2=m[4], it1=m[5], it2=m[6];
+    if(dl!=null)   out+=`<strong style="background:${dialogBg};padding:0 3px;border-radius:2px;font-weight:700">"${esc(dl)}"</strong>`;
+    else if(jp1!=null) out+=`<strong style="background:${dialogBg};padding:0 3px;border-radius:2px;font-weight:700">「${esc(jp1)}」</strong>`;
+    else if(jp2!=null) out+=`<strong style="background:${dialogBg};padding:0 3px;border-radius:2px;font-weight:700">『${esc(jp2)}』</strong>`;
+    else if(it1!=null) out+=`<em style="font-style:italic;color:${italicColor}">'${esc(it1)}'</em>`;
+    else if(it2!=null) out+=`<em style="font-style:italic;color:${italicColor}">${esc(it2)}</em>`;
     last=m.index+m[0].length;
   }
   return out+esc(text.slice(last));
@@ -262,20 +266,10 @@ function buildApp(){
 function bindEvents(){
   document.getElementById("inp-title")?.addEventListener("input",e=>{state.title=e.target.value;});
   document.getElementById("inp-sub")?.addEventListener("input",e=>{state.subtitle=e.target.value;});
-  document.getElementById("inp-char")?.addEventListener("input",e=>{
-    if(e.isComposing) return;
-    state.charName=e.target.value; render();
-  });
-  document.getElementById("inp-char")?.addEventListener("compositionend",e=>{
-    state.charName=e.target.value; render();
-  });
-  document.getElementById("inp-user")?.addEventListener("input",e=>{
-    if(e.isComposing) return;
-    state.userName=e.target.value; render();
-  });
-  document.getElementById("inp-user")?.addEventListener("compositionend",e=>{
-    state.userName=e.target.value; render();
-  });
+  let nameTimer;
+  function nameRender(){ clearTimeout(nameTimer); nameTimer=setTimeout(()=>render(),350); }
+  document.getElementById("inp-char")?.addEventListener("input",e=>{ state.charName=e.target.value; nameRender(); });
+  document.getElementById("inp-user")?.addEventListener("input",e=>{ state.userName=e.target.value; nameRender(); });
   document.getElementById("sel-font")?.addEventListener("change",e=>{
     state.font=e.target.value;
     loadFont(FONTS.find(f=>f.key===e.target.value));
