@@ -6,46 +6,39 @@
 <title>Log Editor</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Georgia',serif;color:#4a3f35;background:#e8e0d8;min-height:100vh;padding:28px 16px;}
-/* 뉴모피즘 */
-.nm-bg{background:#e8e0d8;}
-.wrap{max-width:860px;margin:0 auto;background:#e8e0d8;border-radius:20px;padding:30px 34px;box-shadow:8px 8px 16px #c8c0b8,-8px -8px 16px #ffffff;}
-h1{font-size:.9em;font-weight:500;letter-spacing:.22em;color:#9a7a5a;margin-bottom:26px;text-align:center;padding-bottom:14px;border-bottom:1px solid rgba(154,122,90,0.2);}
+body{font-family:'Georgia',serif;color:#2c2a26;background:#f0ece6;min-height:100vh;padding:28px 16px;}
+.wrap{max-width:840px;margin:0 auto;background:#fff;border:1px solid #e4d8cc;border-radius:16px;padding:30px 34px;}
+h1{font-size:.9em;font-weight:500;letter-spacing:.22em;color:#9a7a5a;margin-bottom:26px;text-align:center;padding-bottom:14px;border-bottom:1px solid #ede4d8;}
 textarea:focus,input:focus,select:focus{outline:none;}
-input::placeholder,textarea::placeholder{color:#b8a898;}
-/* 뉴모피즘 버튼 */
-.nm-btn{background:#e8e0d8;border:none;border-radius:8px;box-shadow:3px 3px 6px #c8c0b8,-3px -3px 6px #ffffff;cursor:pointer;font-family:inherit;color:#7a6a5a;transition:box-shadow .15s;}
-.nm-btn:hover{box-shadow:4px 4px 8px #c8c0b8,-4px -4px 8px #ffffff;}
-.nm-btn:active,.nm-btn.active{box-shadow:inset 3px 3px 6px #c8c0b8,inset -3px -3px 6px #ffffff;color:#5a4a3a;}
-.nm-btn.red{color:#c07070;}
-.nm-btn.red:active{color:#a05050;}
-/* 뉴모피즘 입력칸 */
-.nm-input{background:#e8e0d8;border:none;border-radius:8px;box-shadow:inset 3px 3px 6px #c8c0b8,inset -3px -3px 6px #ffffff;padding:7px 12px;font-family:inherit;font-size:.85em;color:#4a3f35;}
-.nm-input::placeholder{color:#b8a898;}
-/* 탭 */
-.tab-bar{display:flex;gap:4px;margin-bottom:18px;background:#e8e0d8;border-radius:12px;padding:4px;box-shadow:inset 2px 2px 5px #c8c0b8,inset -2px -2px 5px #ffffff;}
-.tbtn{flex:1;text-align:center;font-family:inherit;font-size:.76em;padding:7px 4px;border:none;background:transparent;cursor:pointer;color:#a09080;border-radius:9px;transition:all .2s;}
-.tbtn.active{background:#e8e0d8;box-shadow:3px 3px 6px #c8c0b8,-3px -3px 6px #ffffff;color:#6a4a2a;font-weight:500;}
-/* 프리뷰 영역 */
-.preview-wrap{border-radius:16px;box-shadow:inset 4px 4px 10px #c8c0b8,inset -4px -4px 10px #ffffff;padding:24px 22px;background:#e8e0d8;}
-/* 메시지 카드 */
-.msg-card{border-radius:12px;background:#e8e0d8;box-shadow:4px 4px 8px #c8c0b8,-4px -4px 8px #ffffff;margin-bottom:10px;}
-.msg-card-hd{display:flex;align-items:center;gap:6px;padding:9px 14px;cursor:pointer;user-select:none;border-radius:12px 12px 0 0;}
-.msg-card-hd.open{border-radius:12px 12px 0 0;border-bottom:1px solid rgba(154,122,90,0.12);}
-.msg-card-bd{padding:12px 14px 14px;}
+input::placeholder,textarea::placeholder{color:#c0b0a0;}
+input[type="color"]{padding:0;border:1px solid #e0d4c4;border-radius:4px;cursor:pointer;height:26px;width:36px;background:none;}
+input[type="range"]{accent-color:#b0906a;}
+input[type="checkbox"]{accent-color:#b0906a;width:14px;height:14px;}
+.lbtn:hover{background:#f0e8dc!important;}
+.tbtn{transition:color .15s,border-color .15s;}
+.pbtn{transition:transform .15s;cursor:pointer;}
+.pbtn:hover{transform:translateY(-1px);}
+.msg-card{border:1px solid #ede8e0;border-radius:10px;background:#fdfaf7;margin-bottom:10px;}
+.msg-card-hd{display:flex;align-items:center;gap:6px;padding:9px 14px;cursor:pointer;user-select:none;}
+.msg-card-hd.open{border-bottom:1px solid #f0e8df;}
 .hd-name{font-size:.68em;letter-spacing:.1em;text-transform:uppercase;font-weight:500;flex-shrink:0;}
-.hd-preview{font-size:.72em;color:#b8a898;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;}
+.hd-preview{font-size:.72em;color:#c0b0a0;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;}
 .hd-btns{display:flex;align-items:center;gap:4px;margin-left:auto;flex-shrink:0;}
-.hbtn{font-family:inherit;font-size:.68em;padding:4px 10px;border-radius:6px;white-space:nowrap;}
-.edit-textarea{width:100%;height:380px;line-height:1.9;padding:12px 14px;border-radius:10px;background:#e8e0d8;box-shadow:inset 3px 3px 7px #c8c0b8,inset -3px -3px 7px #ffffff;resize:none;color:#4a3f35;font-family:inherit;border:none;}
-.note-textarea{width:100%;min-height:60px;font-family:inherit;font-size:.85em;color:#aaa;padding:8px 10px;border-radius:8px;background:#e8e0d8;box-shadow:inset 2px 2px 5px #c8c0b8,inset -2px -2px 5px #ffffff;border:none;resize:vertical;}
-.fold-inp{font-family:inherit;font-size:.82em;color:#5a4a3a;background:#e8e0d8;border:none;border-radius:6px;box-shadow:inset 2px 2px 4px #c8c0b8,inset -2px -2px 4px #ffffff;padding:4px 10px;flex:1;outline:none;}
-.panel-box{border-radius:14px;background:#e8e0d8;box-shadow:inset 4px 4px 10px #c8c0b8,inset -4px -4px 10px #ffffff;padding:16px 18px;margin-bottom:18px;}
-.nm-select{background:#e8e0d8;border:none;border-radius:8px;box-shadow:inset 2px 2px 5px #c8c0b8,inset -2px -2px 5px #ffffff;padding:5px 10px;font-family:inherit;font-size:.78em;color:#6a5a4a;cursor:pointer;}
-.num-inp{width:68px;border:none;border-radius:7px;background:#e8e0d8;box-shadow:inset 2px 2px 5px #c8c0b8,inset -2px -2px 5px #ffffff;padding:5px 8px;font-family:inherit;font-size:.82em;color:#4a3f35;text-align:center;}
-.fr-inp{border:none;border-radius:8px;background:#e8e0d8;box-shadow:inset 2px 2px 5px #c8c0b8,inset -2px -2px 5px #ffffff;padding:6px 12px;font-family:inherit;font-size:.84em;color:#4a3f35;flex:1;}
-input[type="color"]{padding:0;border:none;border-radius:6px;cursor:pointer;height:28px;width:38px;background:transparent;box-shadow:2px 2px 5px #c8c0b8,-2px -2px 5px #ffffff;}
-input[type="checkbox"]{accent-color:#b0906a;width:15px;height:15px;}
+.hbtn{font-family:inherit;font-size:.68em;padding:4px 10px;border:1px solid #d8c4a8;border-radius:5px;background:transparent;color:#8a6a4a;cursor:pointer;white-space:nowrap;}
+.hbtn:hover{background:#f5ede0;}
+.hbtn.active{border-color:#b0906a;color:#6a4a2a;font-weight:500;}
+.hbtn.red{border-color:#e0c0c0;color:#c07070;}
+.hbtn.red:hover{background:#fdf0f0;}
+.msg-card-bd{padding:12px 14px 14px;}
+.edit-textarea{width:100%;height:380px;line-height:1.9;padding:10px 12px;border:1px solid #d8c8b4;border-radius:6px;background:#fffdf9;resize:none;color:#2c2a26;font-family:inherit;border:1px solid #d8c8b4;}
+.note-textarea{width:100%;min-height:60px;font-family:inherit;font-size:.85em;color:#aaa;padding:8px 10px;border:1px solid #ede4d8;border-radius:4px;background:#f8f4ef;resize:vertical;}
+.fold-inp{font-family:inherit;font-size:.82em;color:#5a4a3a;background:transparent;border:none;border-bottom:1px solid #e0d4c4;padding:3px 4px;flex:1;outline:none;}
+.panel-box{background:#faf7f3;border:1px solid #ede4d8;border-radius:10px;padding:14px 16px;margin-bottom:18px;}
+.num-inp{width:68px;border:1px solid #ddd4c8;border-radius:6px;padding:5px 8px;font-family:inherit;font-size:.82em;color:#4a3f35;text-align:center;background:#fff;}
+.fr-inp{border:1px solid #ddd4c8;border-radius:6px;padding:6px 10px;font-family:inherit;font-size:.84em;color:#2c2a26;flex:1;background:#fff;}
+.tab-bar{display:flex;border-bottom:1px solid #e8ddd0;margin-bottom:18px;}
+.tbtn{font-family:inherit;font-size:.78em;padding:7px 13px;border:none;background:none;cursor:pointer;color:#bbb;border-bottom:2px solid transparent;margin-bottom:-1px;}
+.tbtn.active{color:#6a4a2a;border-bottom-color:#c0a878;}
 </style>
 </head>
 <body>
@@ -55,7 +48,7 @@ input[type="checkbox"]{accent-color:#b0906a;width:15px;height:15px;}
 </div>
 <script>
 const PRESETS=[
-  {name:"양피지",  colors:{bg:"#faf7f3",text:"#2c2a26",charColor:"#9a7a5a",userColor:"#7a8a9a",dialogBg:"rgba(160,120,60,0.18)",italicColor:"#b07a5a",bubbleBgChar:"#ffffff",bubbleBgUser:"#f5f0e8",bubbleBorder:"#ede4d8",smsFrom:"#ffffff",smsBy:"#d4eaf8",smsBorder:"#c0d8ea"}},
+  {name:"양피지",  colors:{bg:"#faf7f3",text:"#2c2a26",charColor:"#9a7a5a",userColor:"#7a8a9a",dialogBg:"rgba(160,120,60,0.18)",italicColor:"#b07a5a",bubbleBgChar:"#ffffff",bubbleBgUser:"#f5f0e8",bubbleBorder:"#ede4d8",smsFrom:"#ffffff",smsBy:"#d4eaf8",smsBorder:"#c0d4ea"}},
   {name:"로즈",    colors:{bg:"#fdf5f5",text:"#2e2428",charColor:"#c4728a",userColor:"#a09098",dialogBg:"rgba(196,114,138,0.15)",italicColor:"#c49898",bubbleBgChar:"#ffffff",bubbleBgUser:"#f8eff1",bubbleBorder:"#f0dde2",smsFrom:"#ffffff",smsBy:"#f9d6df",smsBorder:"#f0c8d0"}},
   {name:"먹빛",    colors:{bg:"#1e1c1a",text:"#d4cfc8",charColor:"#c8a87a",userColor:"#8a9aaa",dialogBg:"rgba(200,168,122,0.2)",italicColor:"#a8987a",bubbleBgChar:"#2a2824",bubbleBgUser:"#242830",bubbleBorder:"#3a3830",smsFrom:"#2a2828",smsBy:"#1e3048",smsBorder:"#303848"}},
   {name:"세이지",  colors:{bg:"#f4f6f2",text:"#2a2e28",charColor:"#6a8a6a",userColor:"#8a8a7a",dialogBg:"rgba(106,138,106,0.15)",italicColor:"#8aaa7a",bubbleBgChar:"#ffffff",bubbleBgUser:"#eef2ec",bubbleBorder:"#dde6da",smsFrom:"#ffffff",smsBy:"#d4eaf8",smsBorder:"#c0d4e8"}},
@@ -63,23 +56,20 @@ const PRESETS=[
   {name:"에스프레소",colors:{bg:"#f5f0eb",text:"#28201a",charColor:"#7a5a3a",userColor:"#9a8a7a",dialogBg:"rgba(122,90,58,0.18)",italicColor:"#a07858",bubbleBgChar:"#ffffff",bubbleBgUser:"#ede6dc",bubbleBorder:"#ddd4c8",smsFrom:"#ffffff",smsBy:"#d4eaf8",smsBorder:"#c0d4e4"}},
 ];
 const FONTS=[
-  {key:"serif",      label:"명조체",    css:"'Noto Serif KR',Georgia,serif",         url:"https://fonts.googleapis.com/css2?family=Noto+Serif+KR&display=swap"},
+  {key:"serif",      label:"명조체",    css:"'Noto Serif KR',Georgia,serif",          url:"https://fonts.googleapis.com/css2?family=Noto+Serif+KR&display=swap"},
   {key:"pretendard", label:"프리텐다드",css:"'Pretendard','Noto Sans KR',sans-serif",url:"https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css"},
-  {key:"noto",       label:"Noto Sans", css:"'Noto Sans KR',sans-serif",             url:"https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap"},
-  {key:"georgia",    label:"Georgia",   css:"Georgia,serif",                           url:null},
+  {key:"noto",       label:"Noto Sans", css:"'Noto Sans KR',sans-serif",              url:"https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap"},
+  {key:"georgia",    label:"Georgia",   css:"Georgia,serif",                            url:null},
 ];
 const FONT_DEFAULTS={fontSize:14,lineHeight:1.75,letterSpacing:0,paraGap:0.8,indent:false};
 const loadedFonts=new Set();
 function loadFont(f){if(!f||!f.url||loadedFonts.has(f.key))return;loadedFonts.add(f.key);const l=document.createElement("link");l.rel="stylesheet";l.href=f.url;document.head.appendChild(l);}
 
 const state={
-  messages:[],layout:"novel",
-  title:"",subtitle:"",modelName:"",
+  messages:[],layout:"novel",title:"",subtitle:"",modelName:"",
   charName:"캐릭터",userName:"유저",
-  copied:false,tab:"basic",
-  colors:{...PRESETS[0].colors},
-  confirmDeleteId:null,
-  font:"serif",...FONT_DEFAULTS,
+  copied:false,tab:"basic",colors:{...PRESETS[0].colors},
+  confirmDeleteId:null,font:"serif",...FONT_DEFAULTS,
   frFind:"",frReplace:"",frFoundCount:null,frMsg:"",
 };
 
@@ -87,14 +77,14 @@ function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").repl
 
 function fmtHtml(text,colors){
   const {dialogBg,italicColor}=colors;
-  const pat=/\u201c([^\u201d]+)\u201d|"([^"]+)"|\u300c([^\u300d]+)\u300d|\u300e([^\u300f]+)\u300f|\*\*([^*\n]+)\*\*|(?<![a-zA-Z])'([^'\n]+)'(?![a-zA-Z])|\*([^*\n]+)\*/g;
+  const pat=/“([^”]+)”|"([^"]+)"|「([^」]+)」|『([^』]+)』|\*\*([^*\n]+)\*\*|(?<![a-zA-Z])'([^'\n]+)'(?![a-zA-Z])|\*([^*\n]+)\*/g;
   let last=0,out="",m;
   while((m=pat.exec(text))!==null){
     out+=esc(text.slice(last,m.index));
     const dl=m[1]??m[2];
     if(dl!=null)        out+=`<strong style="background:${dialogBg};padding:0 3px;border-radius:2px;font-weight:700">"${esc(dl)}"</strong>`;
-    else if(m[3]!=null) out+=`<strong style="background:${dialogBg};padding:0 3px;border-radius:2px;font-weight:700">\u300c${esc(m[3])}\u300d</strong>`;
-    else if(m[4]!=null) out+=`<strong style="background:${dialogBg};padding:0 3px;border-radius:2px;font-weight:700">\u300e${esc(m[4])}\u300f</strong>`;
+    else if(m[3]!=null) out+=`<strong style="background:${dialogBg};padding:0 3px;border-radius:2px;font-weight:700">「${esc(m[3])}」</strong>`;
+    else if(m[4]!=null) out+=`<strong style="background:${dialogBg};padding:0 3px;border-radius:2px;font-weight:700">『${esc(m[4])}』</strong>`;
     else if(m[5]!=null) out+=`<strong style="font-weight:700">${esc(m[5])}</strong>`;
     else if(m[6]!=null) out+=`<em style="font-style:italic;color:${italicColor}">'${esc(m[6])}'</em>`;
     else if(m[7]!=null) out+=`<em style="font-style:italic;color:${italicColor}">${esc(m[7])}</em>`;
@@ -114,7 +104,8 @@ function parseSms(line){
 function toParasHTML(text,colors,typo){
   const {lineHeight,letterSpacing,paraGap,indent}=typo||state;
   const ls=letterSpacing?`letter-spacing:${letterSpacing}em;`:"";
-  const lines=text.split(/\n/);let out="",i=0;
+const lines = text.split(/\n/);
+let out="",i=0;
   while(i<lines.length){
     const line=lines[i];
     const hm=line.match(/^(#{1,3})\s+(.*)/);
@@ -131,7 +122,7 @@ function toParasHTML(text,colors,typo){
         out+=`<div style="font-size:.65em;color:${sl.right?colors.userColor:colors.charColor};margin-bottom:2px;${ls}">${esc(sl.sender)}</div>`;
         out+=`<div style="max-width:72%;padding:8px 14px;border-radius:${sl.right?"18px 4px 18px 18px":"4px 18px 18px 18px"};background:${bg};border:1px solid ${bd};font-size:.92em;line-height:1.7;${ls}">`;
         out+=esc(sl.content);
-        if(sl.time) out+=`<div style="font-size:.75em;color:${sl.right?"#6a8a6a":"#8a8a8a"};text-align:right;margin-top:3px">${esc(sl.time)}</div>`;
+        if(sl.time)out+=`<div style="font-size:.72em;color:${sl.right?"#6a8a5a":"#8a8888"};text-align:right;margin-top:3px">${esc(sl.time)}</div>`;
         out+=`</div></div>`;i++;
       }
       out+=`</div>`;continue;
@@ -144,16 +135,12 @@ function toParasHTML(text,colors,typo){
   return out;
 }
 
-function parseRisu(raw){
-  try{const o=JSON.parse(raw);if(o.type==="risuChat"&&o.data?.message){return{title:o.data.name||"Untitled",messages:o.data.message.map((m,i)=>({id:i,role:m.role,text:m.data||"",note:"",noteOpen:false,editing:false,collapsed:false,foldEnabled:false,foldTitle:""}))};}}catch(_){}return null;
-}
+function parseRisu(raw){try{const o=JSON.parse(raw);if(o.type==="risuChat"&&o.data?.message){return{title:o.data.name||"Untitled",messages:o.data.message.map((m,i)=>({id:i,role:m.role,text:m.data||"",note:"",noteOpen:false,editing:false,collapsed:false,foldEnabled:false,foldTitle:""}))};}}catch(_){}return null;}
 
 function noteBlockStr(note){if(!note.trim())return"";return`<details style="margin-top:10px;font-size:.82em;border-top:1px solid #ede4d8;padding-top:8px"><summary style="cursor:pointer;list-style:none;color:#c8b8a8">▸ 원문</summary><div style="margin-top:6px;line-height:1.85;color:#aaa">${esc(note)}</div></details>`;}
 
 function generateHTML(){
   const {messages,layout,charName:cn,userName:un,title,subtitle,modelName,colors,font,fontSize,lineHeight,letterSpacing,paraGap,indent}=state;
-  // collapsed는 에디터 UI전용 — 출력엔 foldEnabled만 적용
-  const visible=messages;
   const fontCss=FONTS.find(f=>f.key===font)?.css||FONTS[0].css;
   const typo={lineHeight,letterSpacing,paraGap,indent};
   const fs=fontSize+"px";const ls=letterSpacing?`letter-spacing:${letterSpacing}em;`:"";
@@ -170,30 +157,28 @@ function generateHTML(){
     if(msg.foldEnabled){chatCount++;const label=msg.foldTitle.trim()||`CHAT ${chatCount}`;return`<details style="margin-bottom:1.6em;border:1px solid ${colors.bubbleBorder};border-radius:8px;overflow:hidden"><summary style="cursor:pointer;list-style:none;padding:10px 16px;font-size:.78em;letter-spacing:.08em;color:${nc};background:${isC?colors.bubbleBgChar:colors.bubbleBgUser};user-select:none">${esc(label)}</summary><div style="padding:16px">${inner}</div></details>`;}
     return`<div style="margin-bottom:2em">${inner}</div>`;
   };
-  return`<div style="max-width:680px;margin:0 auto;font-family:${fontCss};color:${colors.text};padding:2.5em 1.2em;background:${colors.bg};border-radius:16px">\n${cover}${visible.map(fn).join("\n")}\n</div>`;
+  return`<div style="max-width:680px;margin:0 auto;font-family:${fontCss};color:${colors.text};padding:2.5em 1.2em;background:${colors.bg};border-radius:16px">
+${cover}${messages.map(fn).join("\n")}
+</div>`;
 }
 
 function buildMsg(msg,idx){
   const {layout,charName:cn,userName:un,colors,confirmDeleteId,font,fontSize,lineHeight,letterSpacing,paraGap,indent}=state;
   const isC=msg.role==="char";const name=isC?cn:un;const nc=isC?colors.charColor:colors.userColor;
-  const preview=msg.text.replace(/\n/g," ").slice(0,55)+(msg.text.length>55?"…":"");
+  const preview = msg.text.replace(/\n/g, " ").slice(0,55) + (msg.text.length>55 ? "…" : "");
   const isConf=confirmDeleteId===msg.id;
   const fontCss=FONTS.find(f=>f.key===font)?.css||FONTS[0].css;
   const typo={lineHeight,letterSpacing,paraGap,indent};
-
   const confirmBtns=isConf
-    ?`<span style="font-size:.65em;color:#b09080;margin-right:2px">삭제?</span><button class="nm-btn hbtn red delete-yes" data-id="${msg.id}" style="font-size:.65em;padding:3px 9px">예</button><button class="nm-btn hbtn delete-no" data-id="${msg.id}" style="font-size:.65em;padding:3px 9px">아니오</button>`
-    :`<button class="nm-btn hbtn edit-btn ${msg.editing?"active":""}" data-id="${msg.id}" style="font-size:.68em;padding:4px 10px">${msg.editing?"완료 ✓":"편집"}</button><button class="nm-btn hbtn note-btn ${msg.noteOpen?"active":""}" data-id="${msg.id}" style="font-size:.68em;padding:4px 10px">원문</button><button class="nm-btn hbtn fold-btn ${msg.foldEnabled?"active":""}" data-id="${msg.id}" style="font-size:.68em;padding:4px 10px" title="출력물 접기">${msg.foldEnabled?"펼치기":"접기"}</button><button class="nm-btn hbtn collapse-btn" data-id="${msg.id}" style="font-size:.68em;padding:4px 10px">${msg.collapsed?"▶":"▼"}</button><button class="nm-btn hbtn red delete-btn" data-id="${msg.id}" style="font-size:.68em;padding:4px 10px">✕</button>`;
-
+    ?`<span style="font-size:.65em;color:#b09080;margin-right:2px">삭제?</span><button class="hbtn red delete-yes" data-id="${msg.id}">예</button><button class="hbtn delete-no" data-id="${msg.id}">아니오</button>`
+    :`<button class="hbtn edit-btn ${msg.editing?"active":""}" data-id="${msg.id}">${msg.editing?"완료 ✓":"편집"}</button><button class="hbtn note-btn ${msg.noteOpen?"active":""}" data-id="${msg.id}">원문</button><button class="hbtn fold-btn ${msg.foldEnabled?"active":""}" data-id="${msg.id}">${msg.foldEnabled?"펼치기":"접기"}</button><button class="hbtn collapse-btn" data-id="${msg.id}">${msg.collapsed?"▶":"▼"}</button><button class="hbtn red delete-btn" data-id="${msg.id}">✕</button>`;
   const header=`<div class="msg-card-hd ${!msg.collapsed?"open":""}" data-id="${msg.id}"><span class="hd-name" style="color:${nc}">${esc(name)}</span>${msg.collapsed?`<span class="hd-preview">${esc(preview)}</span>`:`<span style="flex:1"></span>`}<div class="hd-btns">${confirmBtns}</div></div>`;
   if(msg.collapsed)return`<div class="msg-card" data-msg-id="${msg.id}">${header}</div>`;
-
-  const foldRow=msg.foldEnabled?`<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;padding:8px 12px;background:#e8e0d8;border-radius:8px;box-shadow:inset 2px 2px 4px #c8c0b8,inset -2px -2px 4px #ffffff"><span style="font-size:.72em;color:#a09080;white-space:nowrap">접기 제목</span><input class="fold-inp" data-id="${msg.id}" value="${esc(msg.foldTitle)}" placeholder="CHAT ${idx+1}"></div>`:"";
-  const noteArea=msg.noteOpen?`<div style="margin-top:10px;border-top:1px solid rgba(154,122,90,0.15);padding-top:10px"><div style="font-size:.68em;color:#b0a090;margin-bottom:5px">원문 (번역 전)</div><textarea class="note-textarea" data-id="${msg.id}" placeholder="원문을 입력하세요..."></textarea></div>`:"";
+  const foldRow=msg.foldEnabled?`<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;padding:7px 10px;background:#f5f0ea;border-radius:6px"><span style="font-size:.72em;color:#b0a090;white-space:nowrap">접기 제목</span><input class="fold-inp" data-id="${msg.id}" value="${esc(msg.foldTitle)}" placeholder="CHAT ${idx+1}"></div>`:"";
+  const noteArea=msg.noteOpen?`<div style="margin-top:10px;border-top:1px solid #ede4d8;padding-top:10px"><div style="font-size:.68em;color:#b8a898;margin-bottom:5px">원문 (번역 전)</div><textarea class="note-textarea" data-id="${msg.id}" placeholder="원문을 입력하세요..."></textarea></div>`:"";
   const bodyContent=msg.editing
     ?`<textarea class="edit-textarea msg-text" data-id="${msg.id}" style="font-family:${fontCss};font-size:${fontSize}px">${esc(msg.text)}</textarea>`
     :`<div style="color:${colors.text};font-family:${fontCss};font-size:${fontSize}px">${toParasHTML(msg.text,colors,typo)}</div>`;
-
   setTimeout(()=>{const ta=document.querySelector(`.note-textarea[data-id="${msg.id}"]`);if(ta)ta.value=msg.note;},0);
   return`<div class="msg-card" data-msg-id="${msg.id}">${header}<div class="msg-card-bd">${foldRow}${bodyContent}${noteArea}</div></div>`;
 }
@@ -203,44 +188,31 @@ function alphaFromRgba(c){const m=c.match(/[\d.]+/g);return m&&m[3]!=null?Math.r
 function hexToRgba(hex,a){const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);return`rgba(${r},${g},${b},${a/100})`;}
 
 function buildColorPanel(){
-  const pBtns=PRESETS.map((p,i)=>{const active=JSON.stringify(state.colors)===JSON.stringify(p.colors);return`<button class="nm-btn pbtn" data-preset="${i}" style="font-family:inherit;font-size:.76em;padding:5px 14px;border-radius:20px;background:${p.colors.bg};color:${p.colors.charColor};font-weight:${active?600:400};${active?"box-shadow:inset 3px 3px 6px rgba(0,0,0,0.15),inset -3px -3px 6px rgba(255,255,255,0.7)":""}">${p.name}</button>`;}).join("");
+  const pBtns=PRESETS.map((p,i)=>{const active=JSON.stringify(state.colors)===JSON.stringify(p.colors);return`<button class="pbtn" data-preset="${i}" style="font-family:inherit;font-size:.76em;padding:5px 14px;border-radius:20px;border:1px solid ${active?p.colors.charColor:"#e0d4c4"};background:${p.colors.bg};color:${p.colors.charColor};font-weight:${active?500:400}">${p.name}</button>`;}).join("");
   const ck=[["배경","bg"],["본문","text"],["캐릭터명","charColor"],["유저명","userColor"],["대사 하이라이트","dialogBg"],["이탤릭 색","italicColor"],["말풍선(캐릭터)","bubbleBgChar"],["말풍선(유저)","bubbleBgUser"],["SMS 받음(왼쪽)","smsFrom"],["SMS 보냄(오른쪽)","smsBy"]];
-  const rows=ck.map(([label,key])=>{const val=state.colors[key]||"#ffffff";const isRgba=val.startsWith("rgba");return`<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(154,122,90,0.1)"><span style="font-size:.78em;color:#8a7a6a">${label}</span><div style="display:flex;align-items:center;gap:8px"><input type="color" class="color-inp" data-key="${key}" data-rgba="${isRgba?1:0}" value="${hexFromColor(val)}">${isRgba?`<input type="range" class="alpha-inp" data-key="${key}" min="0" max="100" value="${alphaFromRgba(val)}" style="width:52px;height:4px;accent-color:#b0906a">`:""}</div></div>`;}).join("");
-  return`<div class="panel-box"><div style="font-size:.72em;letter-spacing:.08em;color:#a09080;margin-bottom:10px">테마 프리셋</div><div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px">${pBtns}</div><div style="font-size:.72em;letter-spacing:.08em;color:#a09080;margin-bottom:8px">세부 조정</div>${rows}<button id="reset-colors" class="nm-btn" style="font-size:.72em;padding:5px 12px;margin-top:12px">↺ 기본값으로</button></div>`;
+  const rows=ck.map(([label,key])=>{const val=state.colors[key]||"#ffffff";const isRgba=val.startsWith("rgba");return`<div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid #f0e8e0"><span style="font-size:.78em;color:#8a7a6a">${label}</span><div style="display:flex;align-items:center;gap:6px"><input type="color" class="color-inp" data-key="${key}" data-rgba="${isRgba?1:0}" value="${hexFromColor(val)}">${isRgba?`<input type="range" class="alpha-inp" data-key="${key}" min="0" max="100" value="${alphaFromRgba(val)}" style="width:50px;height:4px">`:""}</div></div>`;}).join("");
+  return`<div class="panel-box"><div style="font-size:.72em;letter-spacing:.08em;color:#b0a090;margin-bottom:10px">테마 프리셋</div><div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px">${pBtns}</div><div style="font-size:.72em;letter-spacing:.08em;color:#b0a090;margin-bottom:8px">세부 조정</div>${rows}<button id="reset-colors" style="font-family:inherit;font-size:.72em;color:#c0a888;background:none;border:none;cursor:pointer;padding:0;margin-top:10px">↺ 기본값으로</button></div>`;
 }
 
-function numRow(label,key,unit,step){
-  return`<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(154,122,90,0.1)"><span style="font-size:.78em;color:#8a7a6a">${label}</span><div style="display:flex;align-items:center;gap:6px"><input type="number" class="num-inp font-num" data-key="${key}" step="${step}" value="${state[key]}"><span style="font-size:.75em;color:#a09080">${unit}</span></div></div>`;
-}
+function numRow(label,key,unit,step){return`<div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid #f0e8e0"><span style="font-size:.78em;color:#8a7a6a">${label}</span><div style="display:flex;align-items:center;gap:6px"><input type="number" class="num-inp font-num" data-key="${key}" step="${step}" value="${state[key]}"><span style="font-size:.75em;color:#a09080">${unit}</span></div></div>`;}
 
 function buildFontPanel(){
   const {font,indent}=state;
-  const fontBtns=FONTS.map(f=>`<button class="nm-btn font-btn pbtn" data-font="${f.key}" style="font-family:${f.css};font-size:.82em;padding:5px 14px;border-radius:20px;${font===f.key?"box-shadow:inset 3px 3px 6px #c8c0b8,inset -3px -3px 6px #ffffff;color:#6a4a2a;font-weight:500":"color:#8a7a6a"}">${f.label}</button>`).join("");
-  return`<div class="panel-box"><div style="font-size:.72em;letter-spacing:.08em;color:#a09080;margin-bottom:10px">폰트</div><div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px">${fontBtns}</div>
-${numRow("폰트 크기","fontSize","px",1)}
-${numRow("줄 간격","lineHeight","",0.05)}
-${numRow("자간","letterSpacing","em",0.01)}
-${numRow("문단 간격","paraGap","em",0.1)}
-<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(154,122,90,0.1)"><span style="font-size:.78em;color:#8a7a6a">들여쓰기</span><label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:.82em;color:#6a5a4a"><input type="checkbox" id="fs-indent" ${indent?"checked":""}><span>${indent?"켜짐":"꺼짐"}</span></label></div>
-<button id="reset-font" class="nm-btn" style="font-size:.72em;padding:5px 12px;margin-top:12px">↺ 기본값으로</button></div>`;
+  const fontBtns=FONTS.map(f=>`<button class="pbtn font-btn" data-font="${f.key}" style="font-family:${f.css};font-size:.82em;padding:5px 14px;border-radius:20px;border:1px solid ${font===f.key?"#b0906a":"#e0d4c4"};background:${font===f.key?"#f0e4d4":"transparent"};color:${font===f.key?"#7a5a3a":"#8a7a6a"};font-weight:${font===f.key?500:400}">${f.label}</button>`).join("");
+  return`<div class="panel-box"><div style="font-size:.72em;letter-spacing:.08em;color:#b0a090;margin-bottom:10px">폰트</div><div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px">${fontBtns}</div>${numRow("폰트 크기","fontSize","px",1)}${numRow("줄 간격","lineHeight","",0.05)}${numRow("자간","letterSpacing","em",0.01)}${numRow("문단 간격","paraGap","em",0.1)}<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f0e8e0"><span style="font-size:.78em;color:#8a7a6a">들여쓰기</span><label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:.82em;color:#6a5a4a"><input type="checkbox" id="fs-indent" ${indent?"checked":""}><span>${indent?"켜짐":"꺼짐"}</span></label></div><button id="reset-font" style="font-family:inherit;font-size:.72em;color:#c0a888;background:none;border:none;cursor:pointer;padding:0;margin-top:10px">↺ 기본값으로</button></div>`;
 }
 
 function buildFRPanel(){
   const {frFind,frReplace,frFoundCount,frMsg}=state;
   const countBadge=frFoundCount!==null?`<span style="font-size:.8em;color:${frFoundCount>0?"#7a9a5a":"#c07070"};margin-left:6px">${frFoundCount}개 발견</span>`:"";
-  return`<div class="panel-box"><div style="font-size:.72em;letter-spacing:.08em;color:#a09080;margin-bottom:12px">찾기 / 바꾸기</div>
-<div style="display:flex;gap:8px;margin-bottom:8px"><input class="fr-inp" id="fr-find" value="${esc(frFind)}" placeholder="찾을 텍스트"><button class="nm-btn" id="fr-search-btn" style="font-size:.78em;padding:5px 14px;white-space:nowrap">찾기${countBadge}</button></div>
-<div style="display:flex;gap:8px;margin-bottom:8px"><input class="fr-inp" id="fr-replace" value="${esc(frReplace)}" placeholder="바꿀 텍스트"><button class="nm-btn" id="fr-replace-btn" style="font-size:.78em;padding:5px 14px;white-space:nowrap" ${frFoundCount===0?"disabled":""}>전체 바꾸기</button></div>
-<div style="font-size:.75em;color:#a09080;min-height:1.2em">${frMsg}</div></div>`;
+  return`<div class="panel-box"><div style="font-size:.72em;letter-spacing:.08em;color:#b0a090;margin-bottom:12px">찾기 / 바꾸기</div><div style="display:flex;gap:8px;margin-bottom:8px"><input class="fr-inp" id="fr-find" value="${esc(frFind)}" placeholder="찾을 텍스트"><button id="fr-search-btn" style="font-family:inherit;font-size:.78em;padding:5px 14px;border:1px solid #d8c4a8;border-radius:5px;background:transparent;color:#8a6a4a;cursor:pointer;white-space:nowrap">찾기${countBadge}</button></div><div style="display:flex;gap:8px;margin-bottom:8px"><input class="fr-inp" id="fr-replace" value="${esc(frReplace)}" placeholder="바꿀 텍스트"><button id="fr-replace-btn" style="font-family:inherit;font-size:.78em;padding:5px 14px;border:1px solid #d8c4a8;border-radius:5px;background:transparent;color:#8a6a4a;cursor:pointer;white-space:nowrap;${frFoundCount===0?"opacity:.4;cursor:not-allowed":""}" ${frFoundCount===0?"disabled":""}>전체 바꾸기</button></div><div style="font-size:.75em;color:#a09080;min-height:1.2em">${frMsg}</div></div>`;
 }
 
-const SMS_HINT=`<details style="margin-bottom:14px;font-size:.78em;color:#a09080"><summary style="cursor:pointer;list-style:none;letter-spacing:.04em">▸ SMS 말풍선 입력 방법</summary><div style="margin-top:8px;line-height:1.9;color:#9a8a78;padding-left:8px;padding-top:4px"><code style="background:rgba(154,122,90,0.1);padding:1px 6px;border-radius:4px">message from 이름: 내용</code> → 왼쪽(받음)<br><code style="background:rgba(154,122,90,0.1);padding:1px 6px;border-radius:4px">message sent by 이름: 내용</code> → 오른쪽(보냄)<br><code style="background:rgba(154,122,90,0.1);padding:1px 6px;border-radius:4px">message from 이름 (PM 3:42): 내용</code> → 시간 작게 표기</div></details>`;
+const SMS_HINT=`<details style="margin-bottom:14px;font-size:.78em;color:#b0a090"><summary style="cursor:pointer;list-style:none;letter-spacing:.04em">▸ SMS 말풍선 입력 방법</summary><div style="margin-top:8px;line-height:1.9;color:#9a8a78;padding-left:8px"><code style="background:#f0ebe4;padding:1px 6px;border-radius:4px">message from 이름: 내용</code> → 왼쪽(받음)<br><code style="background:#f0ebe4;padding:1px 6px;border-radius:4px">message sent by 이름: 내용</code> → 오른쪽(보냄)<br><code style="background:#f0ebe4;padding:1px 6px;border-radius:4px">message from 이름 (PM 3:42): 내용</code> → 시간 표기</div></details>`;
 
 function render(){
-  const fid=document.activeElement?.id;
-  const sel=[document.activeElement?.selectionStart,document.activeElement?.selectionEnd];
-  document.getElementById("app").innerHTML=buildApp();
-  bindEvents();
+  const fid=document.activeElement?.id;const sel=[document.activeElement?.selectionStart,document.activeElement?.selectionEnd];
+  document.getElementById("app").innerHTML=buildApp();bindEvents();
   if(fid){const el=document.getElementById(fid);if(el){el.focus();try{el.setSelectionRange(sel[0],sel[1]);}catch(_){}}}
   state.messages.forEach(msg=>{const ta=document.querySelector(`.note-textarea[data-id="${msg.id}"]`);if(ta)ta.value=msg.note;});
 }
@@ -249,35 +221,11 @@ function buildApp(){
   const {layout,title,subtitle,modelName,charName:cn,userName:un,messages,copied,tab,colors,font}=state;
   const curFont=FONTS.find(f=>f.key===font)||FONTS[0];
   const vis=messages.filter(m=>!m.collapsed).length;
-  const IS=`border:none;background:transparent;box-shadow:inset 2px 2px 5px #c8c0b8,inset -2px -2px 5px #ffffff;border-radius:8px;padding:5px 10px;font-family:${curFont.css};font-size:.86em;color:#4a3f35;`;
-
+  const IS=`font-family:${curFont.css};font-size:.86em;color:#4a3f35;background:transparent;border:none;border-bottom:1px solid #e0d4c4;padding:4px 6px;`;
   const preview=messages.length===0
-    ?`<div class="preview-wrap" style="text-align:center;padding:4em 0;color:#b8a898;font-size:.85em;letter-spacing:.06em"><div style="font-size:1.8em;margin-bottom:.5em;opacity:.3">◌</div>JSON 파일을 업로드하면 로그가 표시됩니다</div>`
-    :`<div class="preview-wrap"><div style="text-align:center;padding:0 0 1.5em;border-bottom:1px solid rgba(154,122,90,0.2);margin-bottom:2em;font-family:${curFont.css}"><div style="font-size:1.15em;font-weight:500;letter-spacing:.08em;color:${colors.charColor}">${esc(title||"제목 없음")}</div>${subtitle?`<div style="font-size:.78em;color:${colors.userColor};margin-top:.3em">${esc(subtitle)}</div>`:""}</div>${modelName?`<div style="text-align:right;font-size:.68em;color:#b8a898;letter-spacing:.05em;margin-top:-.8em;margin-bottom:1.2em">${esc(modelName)}</div>`:""}<div style="font-size:.72em;color:#b0a090;margin-bottom:14px">${messages.length}개 전체 · ${vis}개 표시</div>${messages.map((m,i)=>buildMsg(m,i)).join("")}</div>`;
-
-  return`<div style="border-bottom:1px solid rgba(154,122,90,0.2);padding-bottom:14px;margin-bottom:16px">
-<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px">
-  <input id="inp-title" value="${esc(title)}" placeholder="로그 제목" style="${IS}flex:1;min-width:140px;font-size:.95em;">
-  <input id="inp-sub" value="${esc(subtitle)}" placeholder="부제" style="${IS}width:100px;">
-  <input id="inp-model" value="${esc(modelName)}" placeholder="모델명" style="${IS}width:110px;">
-  <label class="nm-btn" style="font-family:${curFont.css};font-size:.78em;padding:6px 14px;border-radius:8px;cursor:pointer;color:#7a6a5a;user-select:none;white-space:nowrap" for="file-inp">JSON 업로드</label>
-  <input id="file-inp" type="file" accept=".json" style="display:none">
-</div>
-<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-  <input id="inp-char" value="${esc(cn)}" placeholder="캐릭터" style="${IS}width:90px;">
-  <span style="color:#b8a8a0">·</span>
-  <input id="inp-user" value="${esc(un)}" placeholder="유저" style="${IS}width:90px;">
-  <div style="margin-left:auto;display:flex;align-items:center;gap:6px;flex-wrap:wrap">
-    <select id="sel-font" class="nm-select">${FONTS.map(f=>`<option value="${f.key}" ${font===f.key?"selected":""}>${f.label}</option>`).join("")}</select>
-    <div style="display:flex;border-radius:10px;overflow:hidden;box-shadow:3px 3px 6px #c8c0b8,-3px -3px 6px #ffffff;">${[["novel","소설체"],["bubble","말풍선"],["minimal","미니멀"]].map(([k,l])=>`<button class="lbtn nm-btn" data-layout="${k}" style="border-radius:0;font-family:inherit;font-size:.76em;padding:6px 12px;${layout===k?"box-shadow:inset 2px 2px 5px #c8c0b8,inset -2px -2px 5px #ffffff;color:#5a3a2a;font-weight:500":"color:#9a8a7a"}">${l}</button>`).join("")}</div>
-    <button id="copy-btn" class="nm-btn" ${!messages.length?"disabled":""} style="font-family:inherit;font-size:.76em;padding:6px 14px;${copied?"box-shadow:inset 2px 2px 5px #c8c0b8,inset -2px -2px 5px #ffffff;color:#5a3a2a":"color:#8a7060"};opacity:${!messages.length?.4:1}">${copied?"복사됨 ✓":"HTML 복사"}</button>
-    <button id="preview-btn" class="nm-btn" ${!messages.length?"disabled":""} style="font-family:inherit;font-size:.76em;padding:6px 14px;color:#8a7060;opacity:${!messages.length?.4:1}">미리보기 ↗</button>
-  </div>
-</div></div>
-<div class="tab-bar">${[["basic","기본 설정"],["font","폰트 설정"],["color","색상 설정"],["fr","찾기/바꾸기"]].map(([k,l])=>`<button class="tbtn ${tab===k?"active":""}" data-tab="${k}">${l}</button>`).join("")}</div>
-${tab==="color"?buildColorPanel():tab==="font"?buildFontPanel():tab==="fr"?buildFRPanel():""}
-${tab==="basic"?SMS_HINT:""}
-${preview}`;
+    ?`<div style="text-align:center;padding:4em 0;color:#c8b8a8;font-size:.85em;letter-spacing:.06em"><div style="font-size:1.8em;margin-bottom:.5em;opacity:.3">◌</div>JSON 파일을 업로드하면 로그가 표시됩니다</div>`
+    :`<div style="background:${colors.bg};border:1px solid #e0d4c4;border-radius:16px;padding:2.2em 2em;font-family:${curFont.css}"><div style="padding:0 0 1.5em;border-bottom:1px solid #e8ddd0;margin-bottom:2em"><div style="text-align:center"><div style="font-size:1.15em;font-weight:500;letter-spacing:.08em;color:${colors.charColor}">${esc(title||"제목 없음")}</div>${subtitle?`<div style="font-size:.78em;color:${colors.userColor};margin-top:.3em">${esc(subtitle)}</div>`:""}</div>${modelName?`<div style="text-align:right;font-size:.68em;color:#b8a898;letter-spacing:.05em;margin-top:.5em">${esc(modelName)}</div>`:""}</div><div style="font-size:.72em;color:#c0b0a0;margin-bottom:16px">${messages.length}개 전체 · ${vis}개 표시</div>${messages.map((m,i)=>buildMsg(m,i)).join("")}</div>`;
+  return`<div style="border-bottom:1px solid #e8ddd0;padding-bottom:14px;margin-bottom:16px"><div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px"><input id="inp-title" value="${esc(title)}" placeholder="로그 제목" style="${IS}flex:1;min-width:140px;font-size:.95em;"><input id="inp-sub" value="${esc(subtitle)}" placeholder="부제" style="${IS}width:100px;"><input id="inp-model" value="${esc(modelName)}" placeholder="모델명" style="${IS}width:110px;"><label style="font-family:${curFont.css};font-size:.78em;padding:5px 13px;border:1px solid #d4c0a8;border-radius:5px;cursor:pointer;color:#8a6a4a;user-select:none;white-space:nowrap" for="file-inp">JSON 업로드</label><input id="file-inp" type="file" accept=".json" style="display:none"></div><div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><input id="inp-char" value="${esc(cn)}" placeholder="캐릭터" style="${IS}width:90px;"><span style="color:#d4c4b0">·</span><input id="inp-user" value="${esc(un)}" placeholder="유저" style="${IS}width:90px;"><div style="margin-left:auto;display:flex;align-items:center;gap:6px;flex-wrap:wrap"><select id="sel-font" style="font-family:inherit;font-size:.76em;color:#7a5a3a;background:transparent;border:1px solid #e0d4c4;border-radius:5px;padding:5px 8px;cursor:pointer">${FONTS.map(f=>`<option value="${f.key}" ${font===f.key?"selected":""}>${f.label}</option>`).join("")}</select><div style="display:flex;border:1px solid #e0d4c4;border-radius:5px;overflow:hidden">${[["novel","소설체"],["bubble","말풍선"],["minimal","미니멀"]].map(([k,l])=>`<button class="lbtn" data-layout="${k}" style="font-family:inherit;font-size:.76em;padding:5px 11px;border:none;cursor:pointer;background:${layout===k?"#e8ddd0":"transparent"};color:${layout===k?"#6a4a2a":"#aaa"};font-weight:${layout===k?500:400}">${l}</button>`).join("")}</div><button id="copy-btn" ${!messages.length?"disabled":""} style="font-family:inherit;font-size:.76em;padding:5px 12px;border:1px solid #d4c0a8;border-radius:5px;background:${copied?"#e8ddd0":"transparent"};color:${copied?"#6a4a2a":"#a08060"};cursor:${!messages.length?"not-allowed":"pointer"};opacity:${!messages.length ? .4 : 1}">${copied?"복사됨 ✓":"HTML 복사"}</button><button id="preview-btn" ${!messages.length?"disabled":""} style="font-family:inherit;font-size:.76em;padding:5px 12px;border:1px solid #d4c0a8;border-radius:5px;background:transparent;color:#a08060;cursor:${!messages.length?"not-allowed":"pointer"};opacity:${!messages.length ? .4 : 1}">미리보기 ↗</button></div></div></div><div class="tab-bar">${[["basic","기본 설정"],["font","폰트 설정"],["color","색상 설정"],["fr","찾기/바꾸기"]].map(([k,l])=>`<button class="tbtn ${tab===k?"active":""}" data-tab="${k}">${l}</button>`).join("")}</div>${tab==="color"?buildColorPanel():tab==="font"?buildFontPanel():tab==="fr"?buildFRPanel():""}${tab==="basic"?SMS_HINT:""}${preview}`;
 }
 
 function bindEvents(){
@@ -288,28 +236,20 @@ function bindEvents(){
   document.getElementById("inp-char")?.addEventListener("input",e=>{state.charName=e.target.value;nr();});
   document.getElementById("inp-user")?.addEventListener("input",e=>{state.userName=e.target.value;nr();});
   document.getElementById("sel-font")?.addEventListener("change",e=>{state.font=e.target.value;loadFont(FONTS.find(f=>f.key===e.target.value));render();});
-  document.querySelectorAll(".font-num").forEach(inp=>{inp.addEventListener("input",e=>{const k=inp.dataset.key;state[k]=parseFloat(e.target.value)||state[k];});inp.addEventListener("change",()=>render());});
+  document.querySelectorAll(".font-num").forEach(inp=>{inp.addEventListener("input",e=>{const k=inp.dataset.key;const v=parseFloat(e.target.value);if(!isNaN(v))state[k]=v;});inp.addEventListener("change",()=>render());});
   document.getElementById("fs-indent")?.addEventListener("change",e=>{state.indent=e.target.checked;render();});
   document.getElementById("reset-font")?.addEventListener("click",()=>{Object.assign(state,FONT_DEFAULTS);render();});
   document.getElementById("fr-find")?.addEventListener("input",e=>{state.frFind=e.target.value;state.frFoundCount=null;state.frMsg="";});
   document.getElementById("fr-replace")?.addEventListener("input",e=>{state.frReplace=e.target.value;});
-  document.getElementById("fr-search-btn")?.addEventListener("click",()=>{
-    const find=state.frFind.trim();if(!find){state.frMsg="찾을 텍스트를 입력하세요.";render();return;}
-    let count=0;state.messages.forEach(m=>{let i=0;while((i=m.text.indexOf(find,i))!==-1){count++;i+=find.length;}});
-    state.frFoundCount=count;state.frMsg=count>0?`${count}개 발견됨. 바꾸기를 눌러 교체하세요.`:"일치하는 텍스트가 없습니다.";render();
-  });
-  document.getElementById("fr-replace-btn")?.addEventListener("click",()=>{
-    const find=state.frFind.trim();if(!find||state.frFoundCount===0)return;
-    let count=0;state.messages=state.messages.map(m=>{const n=m.text.split(find).length-1;count+=n;return{...m,text:m.text.replaceAll(find,state.frReplace)};});
-    state.frFoundCount=null;state.frMsg=`${count}개 교체 완료.`;render();
-  });
+  document.getElementById("fr-search-btn")?.addEventListener("click",()=>{const find=state.frFind.trim();if(!find){state.frMsg="찾을 텍스트를 입력하세요.";render();return;}let count=0;state.messages.forEach(m=>{let i=0;while((i=m.text.indexOf(find,i))!==-1){count++;i+=find.length;}});state.frFoundCount=count;state.frMsg=count>0?`${count}개 발견됨. 바꾸기를 눌러 교체하세요.`:"일치하는 텍스트가 없습니다.";render();});
+  document.getElementById("fr-replace-btn")?.addEventListener("click",()=>{const find=state.frFind.trim();if(!find||state.frFoundCount===0)return;let count=0;state.messages=state.messages.map(m=>{const n=m.text.split(find).length-1;count+=n;return{...m,text:m.text.replaceAll(find,state.frReplace)};});state.frFoundCount=null;state.frMsg=`${count}개 교체 완료.`;render();});
   document.getElementById("file-inp")?.addEventListener("change",e=>{const file=e.target.files?.[0];if(!file)return;const reader=new FileReader();reader.onload=ev=>{const parsed=parseRisu(ev.target.result);if(parsed){state.title=parsed.title;state.messages=parsed.messages;state.confirmDeleteId=null;render();}else alert("리수 JSON 파일을 인식할 수 없어요.");e.target.value="";};reader.readAsText(file);});
   document.querySelectorAll(".lbtn[data-layout]").forEach(btn=>btn.addEventListener("click",()=>{state.layout=btn.dataset.layout;render();}));
   document.querySelectorAll(".tbtn[data-tab]").forEach(btn=>btn.addEventListener("click",()=>{state.tab=btn.dataset.tab;render();}));
   document.querySelectorAll(".pbtn[data-preset]").forEach(btn=>btn.addEventListener("click",()=>{state.colors={...PRESETS[+btn.dataset.preset].colors};render();}));
   document.querySelectorAll(".font-btn[data-font]").forEach(btn=>btn.addEventListener("click",()=>{state.font=btn.dataset.font;loadFont(FONTS.find(f=>f.key===btn.dataset.font));render();}));
   document.getElementById("copy-btn")?.addEventListener("click",async()=>{if(!state.messages.length)return;await navigator.clipboard.writeText(generateHTML());state.copied=true;render();setTimeout(()=>{state.copied=false;render();},2200);});
-  document.getElementById("preview-btn")?.addEventListener("click",()=>{if(!state.messages.length)return;const w=window.open("","_blank");w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${esc(state.title)}</title><style>body{margin:0;padding:32px 16px;background:#ede9e3;}</style></head><body>${generateHTML()}</body></html>`);w.document.close();});
+  document.getElementById("preview-btn")?.addEventListener("click",()=>{if(!state.messages.length)return;const w=window.open("","_blank");w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${esc(state.title)}</title><style>body{margin:0;padding:32px 16px;background:#f0ece6;}</style></head><body>${generateHTML()}</body></html>`);w.document.close();});
   document.getElementById("reset-colors")?.addEventListener("click",()=>{state.colors={...PRESETS[0].colors};render();});
   document.querySelectorAll(".color-inp").forEach(inp=>{inp.addEventListener("input",e=>{const key=inp.dataset.key,isRgba=inp.dataset.rgba==="1";if(isRgba){const a=document.querySelector(`.alpha-inp[data-key="${key}"]`);state.colors[key]=hexToRgba(e.target.value,a?+a.value:18);}else state.colors[key]=e.target.value;render();});});
   document.querySelectorAll(".alpha-inp").forEach(inp=>{inp.addEventListener("input",e=>{const key=inp.dataset.key,c=document.querySelector(`.color-inp[data-key="${key}"]`);state.colors[key]=hexToRgba(c?c.value:"#a07830",+e.target.value);render();});});
