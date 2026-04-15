@@ -82,12 +82,12 @@ function fmtHtml(text,colors){
   while((m=pat.exec(text))!==null){
     out+=esc(text.slice(last,m.index));
     const dl=m[1]??m[2];
-    if(dl!=null)        out+=`<strong style="background:${dialogBg};padding:0 3px;border-radius:2px;font-weight:700">"${esc(dl)}"</strong>`;
-    else if(m[3]!=null) out+=`<strong style="background:${dialogBg};padding:0 3px;border-radius:2px;font-weight:700">「${esc(m[3])}」</strong>`;
-    else if(m[4]!=null) out+=`<strong style="background:${dialogBg};padding:0 3px;border-radius:2px;font-weight:700">『${esc(m[4])}』</strong>`;
-    else if(m[5]!=null) out+=`<strong style="font-weight:700">${esc(m[5])}</strong>`;
-    else if(m[6]!=null) out+=`<em style="font-style:italic;color:${italicColor}">'${esc(m[6])}'</em>`;
-    else if(m[7]!=null) out+=`<em style="font-style:italic;color:${italicColor}">${esc(m[7])}</em>`;
+    if(dl!=null)        out+=`<span style="background:${dialogBg};padding:0 3px;border-radius:2px;font-weight:700">"${esc(dl)}"</span>`;
+    else if(m[3]!=null) out+=`<span style="background:${dialogBg};padding:0 3px;border-radius:2px;font-weight:700">「${esc(m[3])}」</span>`;
+    else if(m[4]!=null) out+=`<span style="background:${dialogBg};padding:0 3px;border-radius:2px;font-weight:700">『${esc(m[4])}』</span>`;
+    else if(m[5]!=null) out+=`<span style="font-weight:700">${esc(m[5])}</span>`;
+    else if(m[6]!=null) out+=`<span style="font-style:italic;color:${italicColor}">'${esc(m[6])}'</span>`;
+    else if(m[7]!=null) out+=`<span style="font-style:italic;color:${italicColor}">${esc(m[7])}</span>`;
     last=m.index+m[0].length;
   }
   return out+esc(text.slice(last));
