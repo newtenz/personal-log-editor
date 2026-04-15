@@ -37,7 +37,7 @@ input[type="checkbox"]{accent-color:#b0906a;width:14px;height:14px;}
 .hbtn.red:hover{background:#fdf0f0;}
 .msg-card-bd{padding:12px 14px 14px;}
 .edit-textarea{width:100%;height:380px;line-height:1.9;padding:10px 12px;border:1px solid #d8c8b4;border-radius:6px;background:#fffdf9;resize:none;color:#2c2a26;font-family:inherit;border:1px solid #d8c8b4;}
-.note-textarea{width:100%;min-height:60px;font-family:inherit;font-size:.85em;color:#aaa;padding:8px 10px;border:1px solid #ede4d8;border-radius:4px;background:#f8f4ef;resize:vertical;}
+.note-textarea{width:100%;min-height:300px;font-family:inherit;font-size:.85em;color:#aaa;padding:8px 10px;border:1px solid #ede4d8;border-radius:4px;background:#f8f4ef;resize:vertical;}
 .fold-inp{font-family:inherit;font-size:.82em;color:#5a4a3a;background:transparent;border:none;border-bottom:1px solid #e0d4c4;padding:3px 4px;flex:1;outline:none;}
 .panel-box{background:#faf7f3;border:1px solid #ede4d8;border-radius:10px;padding:14px 16px;margin-bottom:18px;}
 .num-inp{width:68px;border:1px solid #ddd4c8;border-radius:6px;padding:5px 8px;font-family:inherit;font-size:.82em;color:#4a3f35;text-align:center;background:#fff;}
@@ -151,7 +151,7 @@ let out="",i=0;
 
 function parseRisu(raw){try{const o=JSON.parse(raw);if(o.type==="risuChat"&&o.data?.message){return{title:o.data.name||"Untitled",messages:o.data.message.map((m,i)=>({id:i,role:m.role,text:m.data||"",note:"",noteOpen:false,editing:false,collapsed:false,foldEnabled:false,foldTitle:""}))};}}catch(_){}return null;}
 
-function noteBlockStr(note){if(!note.trim())return"";return`<details style="margin-top:10px;font-size:.82em;border-top:1px solid #ede4d8;padding-top:8px"><summary style="cursor:pointer;list-style:none;color:#c8b8a8">▸ 원문</summary><div style="margin-top:6px;line-height:1.85;color:#aaa">${esc(note)}</div></details>`;}
+function noteBlockStr(note,colors){if(!note.trim())return"";return`<details style="margin-top:10px;font-size:.82em;border-top:1px solid #ede4d8;padding-top:8px"><summary style="cursor:pointer;list-style:none;color:#c8b8a8">▸ 원문</summary><div style="margin-top:6px;line-height:1.85;color:${colors.text}">${fmtHtml(note,colors).replace(/\n/g,'<br>')}</div></details>`;}
 
 function generateHTML(){
   const {messages,layout,charName:cn,userName:un,title,subtitle,modelName,colors,font,fontSize,lineHeight,letterSpacing,paraGap,indent}=state;
@@ -162,7 +162,7 @@ function generateHTML(){
   let chatCount=0;
   const fn=msg=>{
     const isC=msg.role==="char";const nc=isC?colors.charColor:colors.userColor;const nm=esc(isC?cn:un);
-    const bodyInner=toParasHTML(msg.text,colors,typo)+noteBlockStr(msg.note);
+    const bodyInner=toParasHTML(msg.text,colors,typo)+noteBlockStr(msg.note, colors);
     const bodyDiv=`<div style="color:${colors.text};font-size:${fs};${ls}">${bodyInner}</div>`;
     let inner="";
     if(layout==="novel")inner=`<div style="margin-bottom:.6em"><div style="font-size:.68em;letter-spacing:.12em;text-transform:uppercase;color:${nc};margin-bottom:.6em">${nm}</div>${bodyDiv}</div>`;
